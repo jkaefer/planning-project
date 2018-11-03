@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+ <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Custom fonts for this template -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+</head>
+<style>
+body  {
+    background-image: url("airplanes.jpg");
+
+}
+
+</style>
+<body >
+<br></br>
+
+<div class="card" style="left:12.5%;bottom:10%;width:75%;height:50%;border-color:black;">
+<div class="card-body" style="bottom:10%;">
+<h>Advanced Trip Planner</h>
+<p><i>-"Spend less time planning and more time travelling"</i></p>
+<p>Tutorial Video</p>
+<video width="320" height="240" controls>
+  <source src="website.mp4" type="video/mp4">
+</video>
+</div>
+</div>
+
+<br></br>
+    <div class="card" style="left:12.5%;width:75%;height:50%;border-color:black;">
+	<div class="card-body">
+<p>   How it works: Plug in the airports of your choice and pick a pair of dates to search between.
+      The javascript behind this webapp takes your prompts and searches a database for all flights offered
+      from different airlines travelling from the origin airport to the destination airport, it then graphs the
+      daily flights in a way that is very convenient for you to understand. This way instead of scrolling through
+      dates that might be convenient for you, you can plug in a date range and see the prices charted. Once graphed
+      you can see the "Quick Stats" of the cheapest flight in the black outlined box located below. Keep going down
+      the page to see the graph of the data.
+       </p>
+
+						<!--<div class="input-group mb-3" >-->
+
+
+<form class="form-inline">
+	<label style="font-size:80%;max-width: 150px;">Origin:</label>
+<div class="form-group">
+  <input id="origin" class="autocomplete"placeholder="Enter an Airport" type="text" style="font-size:80%;max-width: 100px;"aria-describedby="basic-addon2"/>
+</div>
+<label style="font-size:80%;max-width: 150px;">Destination:</label>
+<div class="form-group">
+  <input id="destination" class="autocomplete"placeholder="Enter an Airport" type="text" style="font-size:80%;max-width: 100px;"aria-describedby="basic-addon2"/>
+</div>
+
+<label style="font-size:80%;max-width: 150px;">Start of Range:</label>
+					<div class="form-group"><input type="text"  id="leftLimit"style="border-radius:6px;font-size:80%;max-width: 100px;" placeholder="yyyy-mm-dd"  aria-describedby="basic-addon2"></input></div>
+<label style="font-size:80%;max-width: 150px;">End of Range:</label>
+					<div class="form-group"><input type="text"  id="rightLimit"style="border-radius:6px;font-size:80%;max-width: 100px;" placeholder="yyyy-mm-dd"  aria-describedby="basic-addon2"></input></div>
+</form>
+<form class="form-inline">
+<label style="font-size:80%;max-width: 150px;">Airline:</label>
+					<div class="form-group"><input type="text"  id="airline"style="border-radius:6px;font-size:80%;max-width: 100px;" placeholder="airline"  aria-describedby="basic-addon2"></input></div>
+<label style="font-size:80%;max-width: 150px;"># of results:</label>
+					<div class="form-group"><input type="text" id="numresults"style="border-radius:6px;font-size:80%;max-width: 100px;" placeholder="numresults"  aria-describedby="basic-addon2"></input></div>
+
+<label style="font-size:80%;max-width: 100px;">API Key:</label>
+<div class="form-group"><input type="text"  id="key"style="border-radius:6px;font-size:80%max-width:50px;" placeholder="key"  ></input></div>
+<div class="input-group-append">
+    <button class="btn btn-outline-secondary" style="left:25%;"type="button"id="button1">Draw</button>
+  </div>
+
+<div class="card" style="left:5%;width:30%;height:20%;border-color:black;">
+<div class="card-body">
+<h><u>Quick Stats</u></h>
+<p style="font-size:65%;max-width: 150px;"id="mintag">Min. Price:</p>
+<p style="font-size:65%;max-width: 150px;"id="airlinetag">Airline Offering:</p>
+<p style="font-size:65%;max-width: 150px;"id="departuretag">Departing:</p>
+
+</div>
+</div>
+</form>				  
+
+</div>
+</div>
+<br></br>
+<div class="card" style="left:12.5%;bottom:10%;width:75%;height:50%;border-color:black;">
+<div class="card-body" style="bottom:10%;">
+
+<canvas id="myChart" style="left:200px" width="1000" height="400"></canvas>
+</div>
+</div>
+
+<br></br>
+        
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+<script src="moddedchartjs-plugin-zoom.js"></script>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.1/lodash.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script src='https://unpkg.com/fuse.js@2.5.0/src/fuse.min.js'></script>
+<script src='https://screenfeedcontent.blob.core.windows.net/html/airports.js'></script>
+
+<script  src="js/index.js"></script>
+
+
+<script type="text/javascript" >
+//document.getElementById("key").innerHTML = "L3jyYrjdIyF85DJ4V3YfVeOwhcc2dPq0";
+var departure;
+var finishSearch;
+var origin;
+var destination;
+var price;
+
+var datarray=[];
+var oldarray=[];
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart;
+
+var departure = new Date();
+var curr=new Date();
+var rightLimit=new Date();
+var leftLimit=new Date();
+var airline;
+var numresults;
+var key;
+var start=1;
+
+
+
+var labels=[];
+var airlines=[];
+var flights=[];
+var outbound=[];
+var duration=[];
+var departureTimes=[];
+var dataForChart=[];
+var prices=[];
+var prevlength=0;
+var prevflightslength=0;
+
+
+//then.setDate(now.getDate()+30);
+
+drawBlankChart1();
+
+//document.getElementById("increment").onclick = function() {saveInput1()};
+document.getElementById("button1").onclick = function() {saveInput1()};
+
+
+
+		function saveInput1() {
+			//start with current day of the month and go to end of the month
+			//curr=newDate(document.getElementById("
+			if(start==1){
+			datarray=[];
+			airline=document.getElementById("airline").value;
+			numresults=document.getElementById("numresults").value;
+			key="L3jyYrjdIyF85DJ4V3YfVeOwhcc2dPq0";
+			//key=document.getElementById("key").value;
+			rightLimit=new Date(document.getElementById("rightLimit").value);
+			leftLimit=new Date(document.getElementById("leftLimit").value);
+			curr.setFullYear(leftLimit.getFullYear());
+			curr.setMonth(leftLimit.getMonth());
+			curr.setDate(leftLimit.getDate()+1);
+
+		        origin=document.getElementById("origin").value;
+			destination=document.getElementById("destination").value;
+			
+			start++;
+			}
+			
+
+		
+			
+				
+			//console.log(then.getDate());
+	
+			    	var dd = curr.getDate();
+				var mm = curr.getMonth()+1; //January is 0!
+				var yyyy = curr.getFullYear();
+
+				if(dd<10) {
+				    dd = '0'+dd
+				} 
+
+				if(mm<10) {
+				    mm = '0'+mm
+				} 
+
+				departure = yyyy+ '-' + mm + '-' + dd;
+
+				dd = rightLimit.getDate();
+				mm = rightLimit.getMonth()+1; //January is 0!
+			        yyyy = rightLimit.getFullYear();
+
+				if(dd<10) {
+				    dd = '0'+dd
+				} 
+
+				if(mm<10) {
+				    mm = '0'+mm
+				} 
+
+				finishSearch= yyyy+ '-' + mm + '-' + dd;
+				
+				console.log(departure);
+				
+			    searchAPI1();
+
+		}
+
+//case statement can be used to specify api page as string
+function searchAPI1(){
+			
+			$.ajax({
+				dataType:'json',
+				crossDomain: true,
+				url:'https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey='+key+'&origin='+origin+'&destination='+destination+'&departure_date='+departure+airline+numresults,
+     			        type: 'get',
+				cache: true,
+				success:function(data){
+					//datarray=data.results;
+          				datarray=datarray.concat(data.results);
+					//if(start==1){
+					//	prevlength
+					//}
+					//var flights
+					console.log(datarray.length);
+					//console.log(datarray.itineraries[0]);
+					//console(datarray.itineraries[0].outbound.flights[0].departs_at);
+					//console(datarray.itineraries[1].outbound.flights[0].departs_at);
+					
+					
+					for(var i=prevlength;i<datarray.length;i++){
+						currPrice = datarray[i].fare.total_price;
+						
+						      outbound=outbound.concat(datarray[i].itineraries.map(function(e) {
+						     		 return e.outbound;
+					    	      }));
+						  for(var j=0;j<datarray[i].itineraries.length;j++){
+							//console.log(currPrice);
+						      prices= prices.concat(currPrice);
+						  }
+
+
+					}
+					console.log(outbound.length);
+					duration=outbound.map(function(e){
+						return e.duration;
+					});
+
+					console.log(duration.length);
+					flights=outbound.map(function(e){
+						return e.flights;
+					});
+					console.log(flights.length);
+					//console.log(datarray[0].fare.total_price);
+					//console.log(flights[3][1]);
+					//console.log(flights[309][0]);
+					//console.log(flights[5][0]);
+					
+					for(var i=prevflightslength;i<flights.length;i++){
+						//only the first flight for now not worrying about layovers
+						airlines=airlines.concat(flights[i][0].marketing_airline);
+					
+						departureTimes=departureTimes.concat(flights[i][0].departs_at);
+						//this is important if also worrying about layovers
+						/*
+						departureTimes=departureTimes.concat(flights[i].map(function(e){
+							return e.departs_at;
+						}));
+						*/
+					}
+					
+					console.log(departureTimes);
+					//console.log(duration)
+					//here is where to decide what data labels are, airline or departure time
+					
+					console.log(airlines);
+					console.log(prices);
+
+					//pairing function
+					
+					prevflightslength=flights.length;
+					prevlength=datarray.length;
+					//prices=[];
+					//duration=[];
+					curr.setDate(curr.getDate()+1);
+					////setTimeout(saveInput1,200);
+					if(curr<rightLimit){
+						saveInput1();
+					}
+					if(curr>rightLimit){
+						drawCanvas1();
+						var mindetermine=dataForChart.map(function(e){
+							return parseFloat(e);
+						});
+
+						    var min = mindetermine[0];
+						    var minIndex = 0;
+
+						    if (mindetermine.length === 0) {
+							min="n/a";
+						    }
+
+						    for (var i = 1; i < mindetermine.length; i++) {
+							if (mindetermine[i] < min) {
+							    minIndex = i;
+							    min = mindetermine[i];
+							}
+						    }
+						document.getElementById("mintag").innerHTML += " $"+min;
+						document.getElementById("airlinetag").innerHTML += " "+airlines[minIndex];
+						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
+						console.log("minimum price: $"+min);
+						//console.log("minimum index=" +minIndex);
+						console.log("airline offering:"+airlines[minIndex]);
+						console.log("duration:"+duration[minIndex]);
+						//console.log(Math.min.apply(null,mindetermine));
+						curr.setFullYear(leftLimit.getFullYear());
+						curr.setMonth(leftLimit.getMonth());
+						curr.setDate(leftLimit.getDate()+1);
+						start=1;
+					}
+					
+
+				},
+				error:function(){
+					curr.setDate(curr.getDate()+1);
+					////setTimeout(saveInput1,200);
+					if(curr<rightLimit){
+						saveInput1();
+					}
+
+					if(curr>rightLimit){
+						drawCanvas1();
+						var mindetermine=dataForChart.map(function(e){
+							return parseFloat(e);
+						});
+						console.log(Math.min.apply(null,mindetermine));
+                                                console(Math.min.apply(null,data));
+						curr.setFullYear(leftLimit.getFullYear());
+						curr.setMonth(leftLimit.getMonth());
+						curr.setDate(leftLimit.getDate()+1);
+						start=1;
+					}
+					
+				}
+			});
+	     }
+
+
+  function drawBlankChart1(){
+
+  chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ["1", "2", "3", "4", "5", "6", "7"],
+        datasets: [{
+            label: " origin : destination",
+        }]
+    },
+
+    // Configuration options go here
+    options: {// Boolean - whether or not the chart should be responsive and
+				//resize when the browser does.
+		
+				responsive: true,
+			// Boolean - whether to maintain the starting aspect ratio or not when responsive,
+			// if set to false, will take up entire container
+			maintainAspectRatio: true,
+
+
+
+        }
+});
+  }
+
+  function drawCanvas1(){
+	labels=airlines;
+	dataForChart=prices;
+    /*var labels = datarray.map(function(e) {
+    
+        return e.itineraries[0].outbound.flights[0].departs_at;
+      
+    });
+    var data = datarray.map(function(e) {
+
+       return e.fare.total_price;
+
+    });*/
+ chart && chart.destroy();
+ chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: origin+' : '+destination,
+            backgroundColor: 'rgb'+'('+ (Math.floor(Math.random() * 256)).toString()+','+(Math.floor(Math.random() * 256)).toString()+','+(Math.floor(Math.random() * 256)).toString() +')',
+            borderColor: 'rgb'+'('+ (Math.floor(Math.random() * 256)).toString()+','+(Math.floor(Math.random() * 256)).toString()+','+(Math.floor(Math.random() * 256)).toString() +')',
+            data: dataForChart,
+			      //lineTension:0
+        }]
+    },
+
+    // Configuration options go here
+    options: {scales:{ xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Airlines Ordered by Chronologically Offered Flights(from '+departure+' to '+finishSearch+')',
+                                fontStyle: 'bold'
+                            }
+                            
+                        }],
+                        yAxes: [{
+                        	
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Price in Dollars',
+                                fontStyle: 'bold'
+                            },
+                            ticks: {
+                                beginAtZero:false
+                            }
+                        }]
+                    },
+
+
+		
+
+	
+	
+			responsive: true,
+			maintainAspectRatio: true,
+                pan: {
+            	enabled: true,
+                mode: 'x',
+		sensitivity: 10
+		
+		//speed: 10,
+		//threshold: 10
+        	},
+
+        zoom: {
+             enabled: true,
+	    drag:false,
+            // Zooming directions. Remove the appropriate direction to disable 
+            // Eg. 'y' would only allow zooming in the y direction
+            mode: 'x',
+	    sensitivity:0.0000001,
+	    limits: {
+			max: 10,
+			min: 0.5
+		}
+	    
+        }
+	
+    
+
+   }
+});
+}
+</script>
+
+
+  </body>
+</html>
