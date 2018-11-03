@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Server: openresty
+Date: Sat, 27 Oct 2018 20:15:43 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Status: 200 OK
+ETag: "17953a140dc972958ada35ec1163a57f"
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: 96b14fecd70ebd87da35bb9ed94747c8
+X-Runtime: 0.003898
+X-Rack-Cache: miss
+
+{"success":true,"data":{"2018-10-28":{"origin":"CHI","destination":"IND","price":336,"transfers":0,"airline":"UA","flight_number":5936,"departure_at":"2018-10-28T07:35:00Z","return_at":"2018-11-11T18:38:00Z","expires_at":"2018-10-28T07:35:00Z"}},"error":null,"currency":"USD"}
