@@ -136,6 +136,7 @@ var oldarray=[];
 var ctx = document.getElementById('myChart').getContext('2d');
 var chart;
 
+var startDate;
 var departure = new Date();
 var curr=new Date();
 var rightLimit=new Date();
@@ -184,6 +185,7 @@ document.getElementById("button1").onclick = function() {saveInput1()};
 			//key=document.getElementById("key").value;
 			rightLimit=new Date(document.getElementById("rightLimit").value);
 			rightLimit.setDate(rightLimit.getDate()+1);
+			console.log(rightLimit.getDate());
 			leftLimit=new Date(document.getElementById("leftLimit").value);
 			curr.setFullYear(leftLimit.getFullYear());
 			curr.setMonth(leftLimit.getMonth());
@@ -214,6 +216,7 @@ document.getElementById("button1").onclick = function() {saveInput1()};
 				} 
 
 				departure = yyyy+ '-' + mm + '-' + dd;
+				
 
 				dd = rightLimit.getDate();
 				mm = rightLimit.getMonth()+1; //January is 0!
@@ -362,8 +365,13 @@ function searchAPI1(){
 							}
 							if(found==0){console.log('Airline does not exist');}
 							document.getElementById("mintag").innerHTML += " $"+min;
+if(found>1){
 						document.getElementById("airlinetag").innerHTML += " "+fullairlineName;
 						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
+}else{
+				document.getElementById("airlinetag").innerHTML += " "+fullairlineName;
+						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
+}
 					}
 						     });
 						console.log("minimum price: $"+min);
