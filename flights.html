@@ -436,7 +436,7 @@ function searchAPI1(){
   }
 
   function drawCanvas1(){
-	labels=departureTimes;
+	labels=airlines;
 	dataForChart=prices;
     /*var labels = datarray.map(function(e) {
     
@@ -466,6 +466,7 @@ function searchAPI1(){
     options: {scales:{ xAxes: [{
                             display: true,
                             scaleLabel: {
+    				function(label){return  '$' + label.value.toString();},
                                 display: true,
                                 labelString: 'Airlines Ordered by Chronologically Offered Flights(from '+departure+' to '+finishSearch+')',
                                 fontStyle: 'bold'
