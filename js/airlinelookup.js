@@ -4,19 +4,16 @@ var options = {
   maxPatternLength: 32,
   keys: [{
     name: 'iata',
-    weight: 0.5
-  }, {
-    name: 'name',
     weight: 0.3
   }, {
-    name: 'city',
-    weight: 0.2
+    name: 'name',
+    weight: 0.5
   }]
 };
 
-var fuse = new Fuse(airports, options)
+var fuse2 = new Fuse(airlines, options)
 
-$('.autocomplete').each(function() {
+$('.autocomplete2').each(function() {
   var ac = $(this);
   
    ac.on('click', function(e) {
@@ -26,13 +23,13 @@ $('.autocomplete').each(function() {
   .on('keydown', onKeyDown);
   
   var wrap = $('<div>')
-    .addClass('autocomplete-wrapper')
+    .addClass('autocomplete2-wrapper')
     .insertBefore(ac)
     .append(ac);
   
     var list = $('<div>')
       .addClass('autocomplete-results')
-      .on('click', '.autocomplete-result', function(e) {
+      .on('click', '.autocomplete2-result', function(e) {
         e.preventDefault();
         e.stopPropagation();
         selectIndex($(this).data('index'), ac);
@@ -41,24 +38,24 @@ $('.autocomplete').each(function() {
 });
 
 $(document)
-  .on('mouseover', '.autocomplete-result', function(e) {
+  .on('mouseover', '.autocomplete2-result', function(e) {
     var index = parseInt($(this).data('index'), 10);
     if (!isNaN(index)) {
       $(this).attr('data-highlight', index);
     }
   })
-  .on('click', clearResults);
+  .on('click', clearResults2);
 
-function clearResults() {
+function clearResults2() {
   results = [];
   numResults = 0;
-  $('.autocomplete-results').empty();
+  $('.autocomplete2-results').empty();
 }
 
 function selectIndex(index, autoinput) {
   if (results.length >= index + 1) {
     autoinput.val(results[index].iata);
-    clearResults();
+    clearResults2();
   }  
 }
 
@@ -73,13 +70,12 @@ function search(e) {
   var ac = $(e.target);
   var list = ac.next();
   if (ac.val().length > 0) {
-    results = _.take(fuse.search(ac.val()), 7);
+    results = _.take(fuse2.search(ac.val()), 7);
     numResults = results.length;
     
     var divs = results.map(function(r, i) {
-        return '<div class="autocomplete-result" data-index="'+ i +'">'
+        return '<div class="autocomplete2-result" data-index="'+ i +'">'
              + '<div><b>'+ r.iata +'</b> - '+ r.name +'</div>'
-             + '<div class="autocomplete-location">'+ r.city +', '+ r.country +'</div>'
              + '</div>';
      });
     

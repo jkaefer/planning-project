@@ -12,13 +12,13 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/autocomplete2.css">
-
+<!-- Arvo font-->
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Arvo" />
     <!-- Custom fonts for this template -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     
-    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    
 </head>
 <style>
 body  {
@@ -32,9 +32,9 @@ body  {
 
 <div class="card" style="left:12.5%;bottom:10%;width:75%;height:50%;border-color:black;">
 <div class="card-body" style="bottom:10%;">
-<h>Advanced Trip Planner</h>
-<p><i>-"Spend less time planning and more time travelling"</i></p>
-<p>Tutorial Video</p>
+<h style="font-family: Arvo;">Advanced Trip Planner</h>
+<p style="font-family: Arvo;"><i>-"Spend less time planning and more time travelling"</i></p>
+<p style="font-family: Arvo;">Tutorial Video:</p>
 <video width="320" height="240" controls>
   <source src="website.mp4" type="video/mp4">
 </video>
@@ -56,28 +56,29 @@ body  {
 						<!--<div class="input-group mb-3" >-->
 
 
-<form class="form-inline">
-	<label style="font-size:80%;max-width: 150px;">Origin:</label>
+<div class="card" style="left:18.5%;width:65%;height:20%;border-color:black;">
+<div class="card-body">
+	<label style="font-size:100%;max-width: 150px;">Origin:</label>
 <div class="form-group">
-  <input id="origin" class="autocomplete"placeholder="Airport or City" type="text" style="font-size:80%;max-width: 100px;"aria-describedby="basic-addon2"/>
+  <input id="origin" class="autocomplete"placeholder="Airport or City" type="text" style="height:35px!important;font-size:100%;height:2%;width:95%"aria-describedby="basic-addon2"/>
 </div>
-<label style="font-size:80%;max-width: 150px;">Destination:</label>
+<label style="font-size:100%;max-width: 150px;">Destination:</label>
 <div class="form-group">
-  <input id="destination" class="autocomplete"placeholder="Airport or City" type="text" style="font-size:80%;max-width: 100px;"aria-describedby="basic-addon2"/>
+  <input id="destination" class="autocomplete"placeholder="Airport or City" type="text" style="height:35px!important;font-size:100%;width:95%"aria-describedby="basic-addon2"/>
 </div>
 
-<label style="font-size:80%;max-width: 150px;">Start of Range:</label>
-					<div class="form-group"><input type="text"  id="leftLimit" style="border-radius:6px;font-size:80%;max-width: 100px;" placeholder="yyyy-mm-dd"  aria-describedby="basic-addon2"></input></div>
-<label style="font-size:80%;max-width: 150px;">End of Range:</label>
-					<div class="form-group"><input type="text"  id="rightLimit"style="border-radius:6px;font-size:80%;max-width: 100px;" placeholder="yyyy-mm-dd"  aria-describedby="basic-addon2"></input></div>
-</form>
-<form class="form-inline">
-<label style="font-size:80%;max-width: 150px;">Airline:</label>
-					<div class="form-group"><input type="text"  id="airline" class="autocomplete2" style="border-radius:6px;font-size:80%;max-width: 100px;" placeholder="Airline"  aria-describedby="basic-addon2"></input></div>
-<label style="font-size:80%;max-width: 150px;">Results per day:</label>
+<label style="font-size:100%;max-width: 150px;">Start of Range:</label>
+					<div class="form-group"><input type="text"  id="leftLimit" style="border-radius:6px;height:35px!important;font-size:100%;width:95%" placeholder="yyyy-mm-dd"  aria-describedby="basic-addon2"></input></div>
+<label style="font-size:100%;max-width: 150px;">End of Range:</label>
+					<div class="form-group"><input type="text"  id="rightLimit"style="border-radius:6px;height:35px!important;font-size:100%;width:95%" placeholder="yyyy-mm-dd"  aria-describedby="basic-addon2"></input></div>
+
+
+<label style="font-size:100%;max-width: 150px;">Airline:</label>
+					<div class="form-group"><input type="text"  id="airline" class="autocomplete2" style="border-radius:6px;height:35px!important;font-size:100%;width:95%" placeholder="Airline"  aria-describedby="basic-addon2"></input></div>
+<label style="font-size:100%;max-width: 150px;">Results per day:</label>
 
 					<div class="form-group">
-<select id="numresults" style="border-radius:6px;font-size:80%;max-width: 100px;"aria-describedby="basic-addon2">
+<select id="numresults" style="border-radius:6px;height:35px!important;font-size:100%;width:95%"aria-describedby="basic-addon2">
   <option value="All">All</option>
   <option value=1>1</option>
   <option value=2>2</option>
@@ -88,10 +89,15 @@ body  {
 
 
 <div class="input-group-append">
-    <button class="btn btn-outline-secondary" style="left:25%;"type="button"id="button1">Draw</button>
+    <button class="btn btn-outline-secondary" style="left:40%;"type="button"id="button1">Draw</button>
   </div>
 
-<div class="card" style="left:5%;width:30%;height:20%;border-color:black;">
+</div>
+</div>
+
+<br></br>
+
+<div class="card" style="left:18.5%;width:65%;height:20%;border-color:black;">
 <div class="card-body">
 <h><u>Quick Stats</u></h>
 <p style="font-size:65%;max-width: 150px;"id="mintag">Min. Price:</p>
@@ -100,7 +106,7 @@ body  {
 
 </div>
 </div>
-</form>				  
+			  
 
 </div>
 </div>
@@ -113,13 +119,8 @@ body  {
 </div>
 
 <br></br>
-<!-------------------------redirect to mobile---------------------------------------------->
-<script type="text/javascript">
-if (screen.width <= 699) {
-document.location = "flightsMobile.html";
-}
-</script>
-<!-------------------------Firebase---------------------------------------------->
+        
+
 <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
 <script>
   // Initialize Firebase
