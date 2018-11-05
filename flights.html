@@ -466,7 +466,6 @@ function searchAPI1(){
     options: {scales:{ xAxes: [{
                             display: true,
                             scaleLabel: {
-    				function(label){return  '$' + label.value.toString();},
                                 display: true,
                                 labelString: 'Airlines Ordered by Chronologically Offered Flights(from '+departure+' to '+finishSearch+')',
                                 fontStyle: 'bold'
@@ -477,6 +476,7 @@ function searchAPI1(){
                         	
                             display: true,
                             scaleLabel: {
+				function(label){return  '$' + label.value.toString()};
                                 display: true,
                                 labelString: 'Price in Dollars',
                                 fontStyle: 'bold'
