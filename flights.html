@@ -76,8 +76,7 @@ body  {
 <label style="font-size:80%;max-width: 150px;"># of results:</label>
 					<div class="form-group"><input type="text" id="numresults"style="border-radius:6px;font-size:80%;max-width: 100px;" placeholder="numresults"  aria-describedby="basic-addon2"></input></div>
 
-<label style="font-size:80%;max-width: 100px;">API Key:</label>
-<div class="form-group"><input type="text"  id="key"style="border-radius:6px;font-size:80%max-width:50px;" placeholder="key"  ></input></div>
+
 <div class="input-group-append">
     <button class="btn btn-outline-secondary" style="left:25%;"type="button"id="button1">Draw</button>
   </div>
@@ -158,6 +157,11 @@ var dataForChart=[];
 var prices=[];
 var prevlength=0;
 var prevflightslength=0;
+var fullairlineName;
+var mindetermine;
+var min;
+var minIndex;
+
 
 
 //then.setDate(now.getDate()+30);
@@ -235,7 +239,7 @@ function searchAPI1(){
 			
 			$.ajax({
 				dataType:'json',
-				crossDomain: true,
+				//crossDomain: true,
 				url:'https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey='+key+'&origin='+origin+'&destination='+destination+'&departure_date='+departure+airline+numresults,
      			        type: 'get',
 				cache: true,
@@ -313,12 +317,12 @@ function searchAPI1(){
 					}
 					if(curr>rightLimit){
 						drawCanvas1();
-						var mindetermine=dataForChart.map(function(e){
+					        mindetermine=dataForChart.map(function(e){
 							return parseFloat(e);
 						});
 
-						    var min = mindetermine[0];
-						    var minIndex = 0;
+						    min = mindetermine[0];
+						    minIndex = 0;
 
 						    if (mindetermine.length === 0) {
 							min="n/a";
@@ -330,12 +334,40 @@ function searchAPI1(){
 							    min = mindetermine[i];
 							}
 						    }
-						document.getElementById("mintag").innerHTML += " $"+min;
-						document.getElementById("airlinetag").innerHTML += " "+airlines[minIndex];
+						//trying to match 
+						
+						/*
+	                                       
+*/
+						$.ajax({dataType:'json',
+				//crossDomain: true,
+				url:'https://jkaefer.github.io/planning-project/airlines.json',
+     			        type: 'get',
+				cache: true,
+				success:function(data){
+							// update your ui here
+							//console.log(data);
+							var dataArr = data;
+							var found=0;
+
+							// Iterate over each element in the array
+							for (var i = 0; i < dataArr.length; i++){
+							    // look for the entry with a matching `code` value
+							    if (dataArr[i].iata == airlines[minIndex]){
+								// we found it
+								fullairlineName=dataArr[i].name;
+								found++;
+							    }
+							}
+							if(found==0){console.log('Airline does not exist');}
+							document.getElementById("mintag").innerHTML += " $"+min;
+						document.getElementById("airlinetag").innerHTML += " "+fullairlineName;
 						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
+					}
+						     });
 						console.log("minimum price: $"+min);
 						//console.log("minimum index=" +minIndex);
-						console.log("airline offering:"+airlines[minIndex]);
+						console.log("airline offering:"+fullairlineName);
 						console.log("duration:"+duration[minIndex]);
 						//console.log(Math.min.apply(null,mindetermine));
 						curr.setFullYear(leftLimit.getFullYear());
@@ -355,9 +387,10 @@ function searchAPI1(){
 
 					if(curr>rightLimit){
 						drawCanvas1();
-						var mindetermine=dataForChart.map(function(e){
+					        mindetermine=dataForChart.map(function(e){
 							return parseFloat(e);
 						});
+						
 						console.log(Math.min.apply(null,mindetermine));
                                                 console(Math.min.apply(null,data));
 						curr.setFullYear(leftLimit.getFullYear());
@@ -368,6 +401,8 @@ function searchAPI1(){
 					
 				}
 			});
+			
+			 
 	     }
 
 
