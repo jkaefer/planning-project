@@ -366,8 +366,8 @@ function searchAPI1(){
 							if(found==0){console.log('Airline does not exist');}
 							document.getElementById("mintag").innerHTML += " $"+min;
 if(found>1){
-						document.getElementById("airlinetag").innerHTML += " "+fullairlineName;
-						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
+						document.getElementById("airlinetag").innerHTML += " multiple";
+						document.getElementById("departuretag").innerHTML += " multiple";
 }else{
 				document.getElementById("airlinetag").innerHTML += " "+fullairlineName;
 						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
