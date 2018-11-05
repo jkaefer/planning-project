@@ -183,6 +183,7 @@ document.getElementById("button1").onclick = function() {saveInput1()};
 			key="L3jyYrjdIyF85DJ4V3YfVeOwhcc2dPq0";
 			//key=document.getElementById("key").value;
 			rightLimit=new Date(document.getElementById("rightLimit").value);
+			rightLimit.setDate(rightLimit.getDate()+1);
 			leftLimit=new Date(document.getElementById("leftLimit").value);
 			curr.setFullYear(leftLimit.getFullYear());
 			curr.setMonth(leftLimit.getMonth());
