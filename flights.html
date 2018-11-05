@@ -158,6 +158,11 @@ var dataForChart=[];
 var prices=[];
 var prevlength=0;
 var prevflightslength=0;
+var fullairlineName;
+var mindetermine;
+var min;
+var minIndex;
+
 
 
 //then.setDate(now.getDate()+30);
@@ -313,12 +318,12 @@ function searchAPI1(){
 					}
 					if(curr>rightLimit){
 						drawCanvas1();
-						var mindetermine=dataForChart.map(function(e){
+					        mindetermine=dataForChart.map(function(e){
 							return parseFloat(e);
 						});
 
-						    var min = mindetermine[0];
-						    var minIndex = 0;
+						    min = mindetermine[0];
+						    minIndex = 0;
 
 						    if (mindetermine.length === 0) {
 							min="n/a";
@@ -330,9 +335,12 @@ function searchAPI1(){
 							    min = mindetermine[i];
 							}
 						    }
-						document.getElementById("mintag").innerHTML += " $"+min;
-						document.getElementById("airlinetag").innerHTML += " "+airlines[minIndex];
-						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
+						//trying to match 
+						
+						/*
+	                                       
+*/
+						
 						console.log("minimum price: $"+min);
 						//console.log("minimum index=" +minIndex);
 						console.log("airline offering:"+airlines[minIndex]);
@@ -355,7 +363,7 @@ function searchAPI1(){
 
 					if(curr>rightLimit){
 						drawCanvas1();
-						var mindetermine=dataForChart.map(function(e){
+					        mindetermine=dataForChart.map(function(e){
 							return parseFloat(e);
 						});
 						console.log(Math.min.apply(null,mindetermine));
@@ -368,6 +376,27 @@ function searchAPI1(){
 					
 				}
 			});
+			 $.getJSON( "airlines.json")
+						    .done(function(data) {
+							// update your ui here
+							console.dir(data);
+							var dataArr = data;
+
+							// Iterate over each element in the array
+							for (var i = 0; i < dataArr.length; i++){
+							    // look for the entry with a matching `code` value
+							    if (dataArr[i].iata == airlines[minIndex]){
+								// we found it
+								fullairlineName=dataArr[i].name;
+								console.log(dataArr[i].title);
+							    } else {
+								console.log('Airline does not exist');
+							    }
+							}
+							document.getElementById("mintag").innerHTML += " $"+min;
+						document.getElementById("airlinetag").innerHTML += " "+fullairlineName;
+						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
+						     });
 	     }
 
 
