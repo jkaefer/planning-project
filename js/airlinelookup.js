@@ -1,4 +1,4 @@
-var options = {
+var options2 = {
   shouldSort: true,
   threshold: 0.4,
   maxPatternLength: 32,
@@ -11,7 +11,7 @@ var options = {
   }]
 };
 
-var fuse2 = new Fuse(airlines, options)
+var fuse2 = new Fuse(airlines, options2)
 
 $('.autocomplete2').each(function() {
   var ac = $(this);

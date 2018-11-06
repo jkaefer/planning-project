@@ -73,18 +73,10 @@ body  {
 
 
 <label style="font-size:100%;max-width: 150px;">Airline:</label>
-					<div class="form-group"><input type="text"  id="airline" class="autocomplete2" style="border-radius:6px;height:35px!important;font-size:100%;width:95%" placeholder="Airline"  aria-describedby="basic-addon2"></input></div>
+					<div class="form-group"><input type="text"value=""  id="airline" class="autocomplete2" style="border-radius:6px;height:35px!important;font-size:100%;width:95%" placeholder="Airline"  aria-describedby="basic-addon2"></input></div>
 <label style="font-size:100%;max-width: 150px;">Results per day:</label>
 
-					<div class="form-group">
-<select id="numresults" style="border-radius:6px;height:35px!important;font-size:100%;width:95%"aria-describedby="basic-addon2">
-  <option value="All">All</option>
-  <option value=1>1</option>
-  <option value=2>2</option>
-  <option value=3>3</option>
-  <option value=4>4</option>
-  <option value=5>5</option>
-</select></div>
+					<div class="form-group"><input type="text"value=""  id="numresults" style="border-radius:6px;height:35px!important;font-size:100%;width:95%" placeholder="All(default)"  aria-describedby="basic-addon2"></input></div>
 
 
 <div class="input-group-append">
@@ -163,6 +155,7 @@ body  {
 
 <script  src="js/airlinelookup.js"></script>
 <script  src="js/index.js"></script>
+<script src="js/flightTranslate.js"></script>
 
 
 
@@ -206,7 +199,7 @@ var dataForChart=[];
 var prices=[];
 var prevlength=0;
 var prevflightslength=0;
-var fullairlineName;
+var fullairlineName[];
 var mindetermine;
 var min;
 var minIndex;
@@ -227,8 +220,20 @@ document.getElementById("button1").onclick = function() {saveInput1()};
 			//curr=newDate(document.getElementById("
 			if(start==1){
 			datarray=[];
-			airline=document.getElementById("airline").value;
-			numresults=document.getElementById("numresults").value;
+			if(document.getElementById("airline").value==""){
+			     airline="     ";
+			     console.log(true);
+			}
+                        else{
+				airline='&include_airlines='+document.getElementById("airline").value;
+			}
+			if(document.getElementById("numresults").value==""){
+			     numresults="     ";
+			     console.log(true);
+			}
+			else{
+				numresults='&number_of_results='+document.getElementById("numresults").value;
+			}
 			key="L3jyYrjdIyF85DJ4V3YfVeOwhcc2dPq0";
 			//key=document.getElementById("key").value;
 			rightLimitConvert=(document.getElementById("rightLimit").value).replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
@@ -333,10 +338,7 @@ function searchAPI1(){
 						return e.flights;
 					});
 					console.log(flights.length);
-					//console.log(datarray[0].fare.total_price);
-					//console.log(flights[3][1]);
-					//console.log(flights[309][0]);
-					//console.log(flights[5][0]);
+					
 					
 					for(var i=prevflightslength;i<flights.length;i++){
 						//only the first flight for now not worrying about layovers
@@ -393,40 +395,28 @@ function searchAPI1(){
 						/*
 	                                       
 */
-						$.ajax({dataType:'json',
-				//crossDomain: true,
-				url:'https://jkaefer.github.io/planning-project/airlines.json',
-     			        type: 'get',
-				cache: true,
-				success:function(data){
-							// update your ui here
-							//console.log(data);
-							var dataArr = data;
-							var found=0;
-
+						
 							// Iterate over each element in the array
-							for (var i = 0; i < dataArr.length; i++){
-							    // look for the entry with a matching `code` value
-							    if (dataArr[i].iata == airlines[minIndex]){
-								// we found it
-								fullairlineName=dataArr[i].name;
-								found++;
-							    }
-							}
-							if(found==0){console.log('Airline does not exist');}
-							document.getElementById("mintag").innerHTML += " $"+min;
-if(found>1){
-						document.getElementById("airlinetag").innerHTML += " multiple";
-						document.getElementById("departuretag").innerHTML += " multiple";
-}else{
-				document.getElementById("airlinetag").innerHTML += " "+fullairlineName;
-						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex];
-}
-					}
-						     });
+						//getting full airline names
+						   var result;
+						   var resultingName;
+
+						   for(var i=0;i<airlines.length;i++){
+							        result = fuse3.search(airlines[i]);
+								console.log(result);
+								fullairlineName[i]=result[0].name;
+								//found++;
+								//console.log(found);
+					           }
+							
+							
+						   
 						console.log("minimum price: $"+min);
 						//console.log("minimum index=" +minIndex);
-						console.log("airline offering:"+fullairlineName);
+                                                document.getElementById("mintag").innerHTML += " $"+min;
+						document.getElementById("airlinetag").innerHTML += " "+fullairlineName[minIndex];
+						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex].substring(5,7)+'/'+departureTimes[minIndex].substring(8,10)+'/'+departureTimes[minIndex].substring(0,4)+" "+departureTimes[minIndex].substring(11,16);
+						console.log("airline offering:"+fullairlineName[minIndex]);
 						console.log("duration:"+duration[minIndex]);
 						//console.log(Math.min.apply(null,mindetermine));
 						curr.setFullYear(leftLimit.getFullYear());
@@ -522,13 +512,35 @@ if(found>1){
     },
 
     // Configuration options go here
-    options: {scales:{ xAxes: [{
+    options: {tooltips: {
+			    callbacks: {
+			      label: function(tooltipItem,data){
+				    return origin +'=>' + destination;
+			      },
+			      afterLabel: function(tooltipItem, data) {
+				    var multistringText = [];
+
+				    multistringText.push('Airline:  '+fullairlineName[tooltipItem.index]);
+				    multistringText.push('price:    $'+prices[tooltipItem.index]);
+				    multistringText.push('duration:'+duration[tooltipItem.index]);
+				    multistringText.push('departure:'+departureTimes[tooltipItem.index].substring(11,16));
+				    return multistringText; 
+				   }
+				}
+		},
+
+		scales:{ xAxes: [{
                             display: true,
                             scaleLabel: {
                                 display: true,
                                 labelString: 'Airlines Ordered by Chronologically Offered Flights(from '+departure+' to '+finishSearch+')',
                                 fontStyle: 'bold'
-                            }
+                            },
+			    ticks:{
+				callback: function(value, index, values) {
+                        		return  value.substring(0,10);
+                    		}
+			    }
                             
                         }],
                         yAxes: [{
@@ -540,7 +552,10 @@ if(found>1){
                                 fontStyle: 'bold'
                             },
                             ticks: {
-                                beginAtZero:false
+                                beginAtZero:false,
+				callback: function(value, index, values) {
+                        		return '$' + value;
+                    		}
                             }
                         }]
                     },
