@@ -1,6 +1,9 @@
 body {
   margin: 50px;
-  
+  font-family: Arvo;
+}
+input{
+	font-family: Arvo;
 }
 
 
