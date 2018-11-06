@@ -2969,7 +2969,7 @@ var airlines=[
   },
   {
     "iata":"WW",
-    "name":"bmibaby"
+    "name":"Wow Airlines"
   },
   {
     "iata":"WX",
