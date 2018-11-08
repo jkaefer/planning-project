@@ -206,8 +206,7 @@ var minIndex;
 
 var result;
 var resultingName;
-
-
+var ajaxStop=0;
 
 //then.setDate(now.getDate()+30);
 
@@ -297,9 +296,149 @@ document.getElementById("button1").onclick = function() {saveInput1()};
 		}
 
 //case statement can be used to specify api page as string
-function searchAPI1(){
+function varGen(){
+		
+			for(var i=prevlength;i<datarray.length;i++){
+				currPrice = datarray[i].fare.total_price;
+				
+				      outbound=outbound.concat(datarray[i].itineraries.map(function(e) {
+				     		 return e.outbound;
+			    	      }));
+				  for(var j=0;j<datarray[i].itineraries.length;j++){
+					//console.log(currPrice);
+				      prices= prices.concat(currPrice);
+				  }
+
+
+			}
+			console.log(outbound.length);
+			duration=outbound.map(function(e){
+				return e.duration;
+			});
+
+			console.log(duration.length);
+			flights=outbound.map(function(e){
+				return e.flights;
+			});
+			console.log(flights.length);
 			
+			
+			for(var i=prevflightslength;i<flights.length;i++){
+				//only the first flight for now not worrying about layovers
+				airlines=airlines.concat(flights[i][0].marketing_airline);
+			
+				departureTimes=departureTimes.concat(flights[i][0].departs_at);
+				//this is important if also worrying about layovers
+				/*
+				departureTimes=departureTimes.concat(flights[i].map(function(e){
+					return e.departs_at;
+				}));
+				*/
+			}
+			// Iterate over each element in the array
+			//getting full airline names
+			   for(var i= prevflightslength;i<airlines.length;i++){
+				        result = fuse3.search(airlines[i]);
+					//console.log(result);
+					fullairlineName[i]=result[0].name;
+		           }
+			
+			console.log(departureTimes);
+			//console.log(duration)
+			//here is where to decide what data labels are, airline or departure time
+			
+			console.log(airlines);
+			console.log(prices);
+
+			//pairing function
+			
+			prevflightslength=flights.length;
+			prevlength=datarray.length;
+
+
+//////////////////////////////////////typically if going past rightLimit/////////////////////////////////////////////////////////////////
+						drawCanvas1();
+					        mindetermine=dataForChart.map(function(e){
+							return parseFloat(e);
+						});
+
+						    min = mindetermine[0];
+						    minIndex = 0;
+
+						    if (mindetermine.length === 0) {
+							min="n/a";
+						    }
+
+						    for (var i = 1; i < mindetermine.length; i++) {
+							if (mindetermine[i] < min) {
+							    minIndex = i;
+							    min = mindetermine[i];
+							}
+						    }
+						//trying to match 
+						
+						/*
+	                                       
+*/
+						
+							
+							
+							
+						   
+						console.log("minimum price: $"+min);
+						//console.log("minimum index=" +minIndex);
+                                                document.getElementById("mintag").innerHTML += " $"+min;
+						document.getElementById("airlinetag").innerHTML += " "+fullairlineName[minIndex];
+						document.getElementById("departuretag").innerHTML += " "+departureTimes[minIndex].substring(5,7)+'/'+departureTimes[minIndex].substring(8,10)+'/'+departureTimes[minIndex].substring(0,4)+" "+departureTimes[minIndex].substring(11,16);
+						console.log("airline offering:"+fullairlineName[minIndex]);
+						console.log("duration:"+duration[minIndex]);
+						//console.log(Math.min.apply(null,mindetermine));
+						
+
+
+
+
+
+}
+function searchAPI1(){
+		///#1///////////////////////////////////////////////////////////////////
+for(var i=0;i<14;i++){
+	if(ajaxStop==0){
 			$.ajax({
+				dataType:'json',
+				//crossDomain: true,
+				url:'https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey='+key+'&origin='+origin+'&destination='+destination+'&departure_date='+departure+airline+numresults,
+     			        type: 'get',
+				cache: true,
+				success:function(data){
+					//datarray=data.results;
+          				datarray=datarray.concat(data.results);
+					
+					console.log(datarray.length);		
+					
+					curr.setDate(curr.getDate()+1);
+					if(curr>rightLimit){
+				           ajaxStop=1;
+					   varGen();
+					}
+					
+
+				},
+				error:function(){
+					curr.setDate(curr.getDate()+1);
+					if(curr>rightLimit){
+					   varGen();
+					   ajaxStop=1;
+					}
+					
+				}
+			});
+		}
+}	
+			
+//////#end/////////////////////
+		if(ajaxStop==0){			
+					$.ajax({
 				dataType:'json',
 				//crossDomain: true,
 				url:'https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey='+key+'&origin='+origin+'&destination='+destination+'&departure_date='+departure+airline+numresults,
@@ -379,6 +518,7 @@ function searchAPI1(){
 						saveInput1();
 					}
 					if(curr>rightLimit){
+						ajaxStop=1;
 						drawCanvas1();
 					        mindetermine=dataForChart.map(function(e){
 							return parseFloat(e);
@@ -428,7 +568,8 @@ function searchAPI1(){
 						saveInput1();
 					}
 
-					if(curr>rightLimit){
+					if(curr>rightLimit){ 
+						ajaxStop=1;
 						drawCanvas1();
 					        mindetermine=dataForChart.map(function(e){
 							return parseFloat(e);
@@ -444,9 +585,12 @@ function searchAPI1(){
 					
 				}
 			});
-			
-			 
-	     }
+					
+
+		}
+}
+	     
+
 
 
   function drawBlankChart1(){
